@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App / Navigation / General -->
+    <string name="app_name">Testy Na Prawo Jazdy</string>
+    <string name="settings_title">Ustawienia i Baza Danych</string>
+    <string name="back">Wstecz</string>
+    <string name="quit">Wyjdź</string>
+    <string name="cancel">Anuluj</string>
+    <string name="confirm">Potwierdź</string>
+    <string name="delete">Usuń</string>
+    <string name="time">Czas</string>
+
+    <!-- HomeScreen -->
+    <string name="select_category">Wybierz Kategorię Prawa Jazdy:</string>
+    <string name="category_label">Kat. %1$s</string>
+    <string name="db_banner_title">Baza Danych Pytań: Kat. %1$s</string>
+    <string name="db_empty_message">Brak wczytanej bazy pytań. Przejdź do Ustawień (⚙️), aby załadować pytania.</string>
+    <string name="db_questions_count">Dostępnych pytań dla Kat. %1$s: %2$d (Łącznie: %3$d)</string>
+    <string name="btn_start_exam">ROZPOCZNIJ EGZAMIN PRÓBNY (32 Pytania)</string>
+    <string name="exam_history_title">Ostatnie Wyniki Egzaminów:</string>
+    <string name="exam_passed">ZDAŁEŚ</string>
+    <string name="exam_failed">NIE ZDAŁEŚ</string>
+    <string name="pts_format">%1$d / %2$d pkt</string>
+
+    <!-- ExamScreen -->
+    <string name="question_progress">Pytanie %1$d / %2$d</string>
+    <string name="part1_title">Część 1: Podstawowa (TAK / NIE)</string>
+    <string name="part2_title">Część 2: Specjalistyczna (A / B / C)</string>
+    <string name="points_tag">%1$s PKT</string>
+    <string name="quit_dialog_title">Przerwać egzamin?</string>
+    <string name="quit_dialog_text">Czy na pewno chcesz przerwać egzamin? Twój wynik nie zostanie zapisany.</string>
+    <string name="quit_dialog_confirm">Tak, przerwij</string>
+    <string name="no_questions">Brak pytań w zestawie egzaminacyjnym.</string>
+    <string name="time_left_question">Czas na pytanie: %1$s s</string>
+    <string name="reading_phase_time">Czas na przeczytanie pytania: %1$d s</string>
+    <string name="answering_phase_time">Czas na odpowiedź: %1$d s</string>
+    <string name="video_playing_status">Odtwarzanie filmu...</string>
+    <string name="btn_start_media">START</string>
+    <string name="start_media_hint">Kliknij START lub poczekaj na odtworzenie</string>
+    <string name="auto_advance_warning">AUTOMATYCZNE PRZEJŚCIE DALEJ!</string>
+    <string name="btn_yes">TAK</string>
+    <string name="btn_no">NIE</string>
+    <string name="btn_confirm_next">POTWIERDŹ I NASTĘPNE PYTANIE</string>
+    <string name="btn_finish_exam">ZAKOŃCZ EGZAMIN I POKAŻ WYNIK</string>
+    <string name="media_bytes_format">PLIK MULTIMEDIALNY (%1$d KB)</string>
+    <string name="media_missing_title">BRAK PLIKU MULTIMEDIÓW W PAMIĘCI</string>
+    <string name="media_missing_file">Plik: %1$d</string>
+    <string name="media_missing_hint">Przejdź do Ustawień (⚙️) i wgraj pliki multimediów.</string>
+    <string name="question_image_desc">Zdjęcie pytania</string>
+
+    <!-- ResultScreen -->
+    <string name="result_title">Wynik Egzaminu</string>
+    <string name="result_positive">WYNIK POZYTYWNY</string>
+    <string name="result_negative">WYNIK NEGATYWNY</string>
+    <string name="result_passed_banner">ZDAŁEŚ EGZAMIN!</string>
+    <string name="result_failed_banner">NIE ZDAŁEŚ EGZAMINU</string>
+    <string name="result_pts_format">%1$d / %2$d PKT</string>
+    <string name="result_min_required">Wymagane minimum do zaliczenia: 68 / 74 pkt</string>
+    <string name="result_review_title">Zestawienie Pytania Po Pytaniu (%1$s pytań):</string>
+    <string name="review_correct_pts">✔ +%1$s pkt</string>
+    <string name="review_incorrect_pts">✘ 0 pkt</string>
+    <string name="review_question_label">Pytanie %1$d (%2$s)</string>
+    <string name="review_answers_summary">Udzielona odp: %1$s | Poprawna: %2$s</string>
+    <string name="btn_main_menu">MENU GŁÓWNE</string>
+    <string name="btn_new_exam">NOWY EGZAMIN</string>
+
+    <!-- SettingsScreen / ImportDataScreen -->
+    <string name="storage_folder_title">Folder Zapisywania Danych i Multimediów</string>
+    <string name="storage_path_format">Ścieżka zapisu: %1$s</string>
+    <string name="btn_change_storage">Zmień folder zapisu danych</string>
+    <string name="default_category_title">Domyślna Kategoria Prawa Jazdy:</string>
+    <string name="question_catalog_title">1. Plik Bazy Pytań (Excel / ZIP)</string>
+    <string name="file_selected_format">Wybrano plik do wczytania: %s</string>
+    <string name="questions_saved_count">Załadowane pytania zapisane na dysku: %1$s</string>
+    <string name="btn_select_question_file">Wybierz plik pytań (.xlsx / .zip)</string>
+    <string name="media_files_title">2. Pliki Multimediów (Wieloczęściowe Archiwa ZIP)</string>
+    <string name="media_description">Wspiera wielogigabajtowe archiwum w częściach (rozpakowywanie strumieniowe bezpośrednio na dysk).\nObecnie rozpakowano w wybranym folderze media: %1$s plików.</string>
+    <string name="part_format">Część %1$d: %2$s</string>
+    <string name="btn_select_media_parts">Wybierz części multimediów (.zip)</string>
+    <string name="btn_clear_parts">Wyczyść części</string>
+    <string name="btn_start_import">ROZPOCZNIJ IMPORT I ZAPIS NA DYSK</string>
+    <string name="btn_importing">PRZETWARZANIE I ZAPIS...</string>
+    <string name="logs_title">Logi operacji:</string>
+    <string name="no_media_selected">Nie wybrano żadnych plików multimediów.</string>
+    <string name="no_question_file_selected">Nie wybrano pliku pytań.</string>
+    <string name="import_screen_title">Wgrywanie Pytań i Multimediów</string>
+    <string name="db_memory_status">Stan Bazy Danych w Pamięci</string>
+    <string name="db_memory_summary">• Liczba pytań w bazie: %1$d\n• Liczba multimediów w pamięci: %2$d plików</string>
+    <string name="none_selected">Nie wybrano pliku pytań.</string>
+    <string name="download_data_question">Skąd pobrać te dane?</string>
+    <string name="download_data_text">Z oficjalnej strony gov.pl. Pamiętaj, aby pobrać bazę pytań oraz wszystkie załączniki.</string>
+    <string name="download_data_btn">Pobierz dane z gov.pl</string>
+</resources>

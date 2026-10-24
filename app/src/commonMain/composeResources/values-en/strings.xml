@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App / Navigation / General -->
+    <string name="app_name">Driving License Tests</string>
+    <string name="settings_title">Settings and Database</string>
+    <string name="back">Back</string>
+    <string name="quit">Exit</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete">Delete</string>
+    <string name="time">Time</string>
+
+    <!-- HomeScreen -->
+    <string name="select_category">Select Driving License Category:</string>
+    <string name="category_label">Cat. %1$s</string>
+    <string name="db_banner_title">Question Database: Cat. %1$s</string>
+    <string name="db_empty_message">No question database loaded. Go to Settings (⚙️) to load questions.</string>
+    <string name="db_questions_count">Available questions for Cat. %1$s: %2$d (Total: %3$d)</string>
+    <string name="btn_start_exam">START MOCK EXAM (32 Questions)</string>
+    <string name="exam_history_title">Recent Exam Results:</string>
+    <string name="exam_passed">PASSED</string>
+    <string name="exam_failed">FAILED</string>
+    <string name="pts_format">%1$d / %2$d pts</string>
+
+    <!-- ExamScreen -->
+    <string name="question_progress">Question %1$d / %2$d</string>
+    <string name="part1_title">Part 1: Basic (YES / NO)</string>
+    <string name="part2_title">Part 2: Specialized (A / B / C)</string>
+    <string name="points_tag">%1$s PTS</string>
+    <string name="quit_dialog_title">Abort exam?</string>
+    <string name="quit_dialog_text">Are you sure you want to abort the exam? Your result will not be saved.</string>
+    <string name="quit_dialog_confirm">Yes, abort</string>
+    <string name="no_questions">No questions in the exam set.</string>
+    <string name="time_left_question">Time for question: %1$s s</string>
+    <string name="auto_advance_warning">AUTOMATIC ADVANCE!</string>
+    <string name="btn_yes">YES</string>
+    <string name="btn_no">NO</string>
+    <string name="btn_confirm_next">CONFIRM AND NEXT QUESTION</string>
+    <string name="btn_finish_exam">FINISH EXAM AND SHOW RESULT</string>
+    <string name="media_bytes_format">MEDIA FILE (%d KB)</string>
+    <string name="media_missing_title">MISSING MEDIA FILE IN STORAGE</string>
+    <string name="media_missing_file">File: %s</string>
+    <string name="media_missing_hint">Go to Settings (⚙️) and upload media files.</string>
+    <string name="question_image_desc">Question image</string>
+
+    <!-- ResultScreen -->
+    <string name="result_title">Exam Result</string>
+    <string name="result_positive">PASSED</string>
+    <string name="result_negative">FAILED</string>
+    <string name="result_passed_banner">YOU PASSED THE EXAM!</string>
+    <string name="result_failed_banner">YOU FAILED THE EXAM</string>
+    <string name="result_pts_format">%1$d / %2$d PTS</string>
+    <string name="result_min_required">Minimum required to pass: 68 / 74 pts</string>
+    <string name="result_review_title">Question by Question Summary (%1$s questions):</string>
+    <string name="review_correct_pts">✔ +%1$s pts</string>
+    <string name="review_incorrect_pts">✘ 0 pts</string>
+    <string name="review_question_label">Question %1$d (%2$s)</string>
+    <string name="review_answers_summary">Your answer: %1$s | Correct: %2$s</string>
+    <string name="btn_main_menu">MAIN MENU</string>
+    <string name="btn_new_exam">NEW EXAM</string>
+
+    <!-- SettingsScreen / ImportDataScreen -->
+    <string name="storage_folder_title">Storage Folder for Data and Media</string>
+    <string name="storage_path_format">Storage path: %1$s</string>
+    <string name="btn_change_storage">Change storage folder</string>
+    <string name="default_category_title">Default Driving License Category:</string>
+    <string name="question_catalog_title">1. Question Database File (Excel / ZIP)</string>
+    <string name="file_selected_format">Selected file to load: %s</string>
+    <string name="questions_saved_count">Loaded questions saved on disk: %1$s</string>
+    <string name="btn_select_question_file">Select question file (.xlsx / .zip)</string>
+    <string name="media_files_title">2. Media Files (Multi-part ZIP Archives)</string>
+    <string name="media_description">Supports multi-gigabyte archives in parts (streaming extraction directly to disk).\nCurrently extracted in the selected media folder: %1$s files.</string>
+    <string name="part_format">Part %1$d: %2$s</string>
+    <string name="btn_select_media_parts">Select media parts (.zip)</string>
+    <string name="btn_clear_parts">Clear parts</string>
+    <string name="btn_start_import">START IMPORT AND SAVE TO DISK</string>
+    <string name="btn_importing">PROCESSING AND SAVING...</string>
+    <string name="logs_title">Operation logs:</string>
+    <string name="no_media_selected">No media files selected.</string>
+    <string name="no_question_file_selected">No question file selected.</string>
+    <string name="import_screen_title">Importing Questions and Media</string>
+    <string name="db_memory_status">Database Memory Status</string>
+    <string name="db_memory_summary">• Number of questions in database: %1$d\n• Number of media files in memory: %2$d files</string>
+    <string name="none_selected">No question file selected.</string>
+</resources>
