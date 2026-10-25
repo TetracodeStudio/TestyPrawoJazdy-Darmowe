@@ -31,6 +31,7 @@ import javax.swing.JPanel
 import javax.swing.SwingUtilities
 
 import androidx.compose.runtime.rememberUpdatedState
+import java.util.concurrent.atomic.AtomicBoolean
 
 @Composable
 actual fun VideoPlayer(
@@ -85,6 +86,7 @@ actual fun VideoPlayer(
 
     var mediaPlayerComponentRef by remember { mutableStateOf<EmbeddedMediaPlayerComponent?>(null) }
     var loadedFilePath by remember { mutableStateOf<String?>(null) }
+    val hasEndedRef = remember { AtomicBoolean(false) }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -119,9 +121,8 @@ actual fun VideoPlayer(
 
             val mediaPlayer = component.mediaPlayer()
 
-            // Nasłuchiwanie na koniec odtwarzania - pauza na ostatniej klatce i wywołanie callbacku
-            mediaPlayer.events().addMediaPlayerEventListener(object : MediaPlayerEventAdapter() {
-                override fun finished(mediaPlayer: MediaPlayer) {
+            fun notifyEnded() {
+                if (hasEndedRef.compareAndSet(false, true)) {
                     SwingUtilities.invokeLater {
                         try {
                             mediaPlayer.controls().pause()
@@ -131,10 +132,29 @@ actual fun VideoPlayer(
                         currentOnVideoEnded()
                     }
                 }
-                override fun error(mediaPlayer: MediaPlayer) {
-                    SwingUtilities.invokeLater {
-                        currentOnVideoEnded()
+            }
+
+            // Nasłuchiwanie na koniec odtwarzania - natychmiastowe wykrycie końca i wywołanie callbacku bez opóźnienia
+            mediaPlayer.events().addMediaPlayerEventListener(object : MediaPlayerEventAdapter() {
+                override fun positionChanged(mediaPlayer: MediaPlayer, newPosition: Float) {
+                    if (newPosition >= 0.985f) {
+                        notifyEnded()
                     }
+                }
+
+                override fun timeChanged(mediaPlayer: MediaPlayer, newTime: Long) {
+                    val length = mediaPlayer.status().length()
+                    if (length > 0 && newTime >= length - 200) {
+                        notifyEnded()
+                    }
+                }
+
+                override fun finished(mediaPlayer: MediaPlayer) {
+                    notifyEnded()
+                }
+
+                override fun error(mediaPlayer: MediaPlayer) {
+                    notifyEnded()
                 }
             })
 
@@ -146,11 +166,13 @@ actual fun VideoPlayer(
 
             if (loadedFilePath != absolutePath) {
                 loadedFilePath = absolutePath
+                hasEndedRef.set(false)
                 val mediaPlayer = component.mediaPlayer()
                 val videoCanvas = component.videoSurfaceComponent()
 
                 fun startPlayback() {
                     try {
+                        hasEndedRef.set(false)
                         mediaPlayer.controls().stop()
 
                         // Wyłączenie dźwięku

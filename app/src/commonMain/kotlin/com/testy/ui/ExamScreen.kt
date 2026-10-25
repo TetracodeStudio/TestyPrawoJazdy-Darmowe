@@ -356,8 +356,8 @@ fun ExamScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Answer Options
-                val isAnsweringEnabled = currentPhase == ExamQuestionPhase.ANSWERING
+                // Answer Options (Odpowiedzi zawsze odblokowane od razu)
+                val isAnsweringEnabled = true
 
                 if (currentQuestion.isBasic) {
                     // YES / NO
@@ -425,7 +425,7 @@ fun ExamScreen(
                             }
                         }
                     },
-                    enabled = selectedAnswer != null && isAnsweringEnabled,
+                    enabled = selectedAnswer != null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
