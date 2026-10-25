@@ -33,6 +33,39 @@
     <string name="exam_failed">FAILED</string>
     <string name="pts_format">%1$d / %2$d pts</string>
 
+    <!-- Practice / Learning Mode -->
+    <string name="learning_progress_title">Learning Progress: Cat. %1$s</string>
+    <string name="learning_progress_summary">Passed %1$d of %2$d questions (%3$d%%)</string>
+    <string name="btn_start_learning">LEARNING MODE &amp; TOPICS</string>
+    <string name="practice_screen_title">Learning Mode (Cat. %1$s)</string>
+    <string name="all_topics_tab">All Topics</string>
+    <string name="unpassed_only_tab">Unpassed Only</string>
+    <string name="btn_start_topic">Start learning in this topic</string>
+    <string name="btn_reset_category_progress">Reset progress for Cat. %1$s</string>
+    <string name="reset_progress_dialog_title">Reset progress</string>
+    <string name="reset_progress_dialog_text">Are you sure you want to reset passed questions for category %1$s?</string>
+    <string name="topic_all_questions_name">Complete Question Pool</string>
+    <string name="topic_all_questions_desc">All questions available for the selected category</string>
+    <string name="topic_basic_3pts_name">Basic (3 pts)</string>
+    <string name="topic_basic_3pts_desc">High safety impact questions (YES/NO)</string>
+    <string name="topic_basic_2pts_name">Basic (2 pts)</string>
+    <string name="topic_basic_2pts_desc">Medium safety impact questions (YES/NO)</string>
+    <string name="topic_basic_1pts_name">Basic (1 pt)</string>
+    <string name="topic_basic_1pts_desc">Low safety impact questions (YES/NO)</string>
+    <string name="topic_spec_3pts_name">Specialized (3 pts)</string>
+    <string name="topic_spec_3pts_desc">Specialized knowledge questions 3 pts (A/B/C)</string>
+    <string name="topic_spec_2pts_name">Specialized (2 pts)</string>
+    <string name="topic_spec_2pts_desc">Specialized knowledge questions 2 pts (A/B/C)</string>
+    <string name="topic_spec_1pts_name">Specialized (1 pt)</string>
+    <string name="topic_spec_1pts_desc">Specialized knowledge questions 1 pt (A/B/C)</string>
+    <string name="practice_question_progress">Topic: %1$s  |  Question %2$d / %3$d</string>
+    <string name="answer_correct">✔ CORRECT ANSWER! Question passed!</string>
+    <string name="answer_incorrect">✘ INCORRECT ANSWER! Correct is: %1$s</string>
+    <string name="btn_next_question">NEXT QUESTION</string>
+    <string name="btn_prev_question">PREVIOUS</string>
+    <string name="question_passed_badge">PASSED</string>
+    <string name="question_unpassed_badge">NOT PASSED</string>
+
     <!-- ExamScreen -->
     <string name="question_progress">Question %1$d / %2$d</string>
     <string name="part1_title">Part 1: Basic (YES / NO)</string>

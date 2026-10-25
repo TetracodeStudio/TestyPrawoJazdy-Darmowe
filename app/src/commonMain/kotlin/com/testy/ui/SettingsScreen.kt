@@ -39,6 +39,9 @@ fun SettingsScreen(
     val customDir by DataManager.customDataDir.collectAsState()
     val availableCategories = DataManager.availableCategories
 
+    val themeMode by DataManager.themeMode.collectAsState()
+    val themePalette by DataManager.themePalette.collectAsState()
+
     var questionFile by remember { mutableStateOf<PickedFile?>(null) }
     var mediaParts by remember { mutableStateOf<List<PickedFile>>(emptyList()) }
     var statusLogs by remember { mutableStateOf<List<String>>(emptyList()) }
@@ -72,6 +75,14 @@ fun SettingsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // Appearance & Theme Section
+            AppearanceAndThemeCard(
+                currentThemeMode = themeMode,
+                onThemeModeSelected = { DataManager.setThemeMode(it) },
+                currentPalette = themePalette,
+                onPaletteSelected = { DataManager.setThemePalette(it) }
+            )
+
             // Target Storage Directory Card
             Card(
                 shape = RoundedCornerShape(16.dp),
@@ -168,7 +179,7 @@ fun SettingsScreen(
                         text = questionFile?.let { stringResource(Res.string.file_selected_format, it.name) }
                             ?: stringResource(Res.string.questions_saved_count, questions.size),
                         fontSize = 13.sp,
-                        color = if (questionFile != null) MaterialTheme.colorScheme.primary else Color.DarkGray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     OutlinedButton(
@@ -211,7 +222,7 @@ fun SettingsScreen(
                     Text(
                         text = stringResource(Res.string.media_description, extractedMediaCount),
                         fontSize = 12.sp,
-                        color = Color.DarkGray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
 
                     if (mediaParts.isNotEmpty()) {
@@ -230,6 +241,7 @@ fun SettingsScreen(
                                         Text(
                                             text = stringResource(Res.string.part_format, idx + 1, part.name),
                                             fontSize = 13.sp,
+                                            color = MaterialTheme.colorScheme.onSurface,
                                             fontWeight = FontWeight.Medium
                                         )
                                         TextButton(onClick = {
@@ -292,7 +304,7 @@ fun SettingsScreen(
                     Text(
                         text = stringResource(Res.string.download_data_text),
                         fontSize = 12.sp,
-                        color = Color.DarkGray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
 
                     Button(

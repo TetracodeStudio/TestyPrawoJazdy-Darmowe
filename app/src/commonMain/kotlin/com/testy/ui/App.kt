@@ -15,7 +15,13 @@ fun App() {
     var currentSession by remember { mutableStateOf<ExamSession?>(null) }
     var lastResult by remember { mutableStateOf<ExamResult?>(null) }
 
-    MaterialTheme {
+    val themeMode by DataManager.themeMode.collectAsState()
+    val themePalette by DataManager.themePalette.collectAsState()
+
+    TestyTheme(
+        themeMode = themeMode,
+        palette = themePalette
+    ) {
         Surface {
             when (currentScreen) {
                 is Screen.Home -> {
@@ -27,6 +33,9 @@ fun App() {
                             val session = ExamGenerator.generateExam(selectedCategory, questions)
                             currentSession = session
                             currentScreen = Screen.Exam
+                        },
+                        onOpenPractice = {
+                            currentScreen = Screen.Practice
                         },
                         onOpenSettings = {
                             currentScreen = Screen.Settings
@@ -98,9 +107,8 @@ fun App() {
                 }
 
                 is Screen.Practice -> {
-                    SettingsScreen(
+                    PracticeScreen(
                         selectedCategory = selectedCategory,
-                        onCategorySelected = { selectedCategory = it },
                         onBack = { currentScreen = Screen.Home }
                     )
                 }

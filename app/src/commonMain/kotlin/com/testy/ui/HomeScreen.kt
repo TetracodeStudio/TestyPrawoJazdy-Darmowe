@@ -29,16 +29,20 @@ import com.testy.model.ExamResult
 import org.jetbrains.compose.resources.stringResource
 import testy.app.generated.resources.*
 
+import androidx.compose.material.icons.filled.School
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     selectedCategory: String,
     onCategorySelected: (String) -> Unit,
     onStartExam: () -> Unit,
+    onOpenPractice: () -> Unit,
     onOpenSettings: () -> Unit
 ) {
     val questions by DataManager.questions.collectAsState()
     val history by DataManager.examHistory.collectAsState()
+    val passedMap by DataManager.passedQuestionIds.collectAsState()
     val availableCategories = DataManager.availableCategories
 
     var showClearHistoryDialog by remember { mutableStateOf(false) }
@@ -46,6 +50,14 @@ fun HomeScreen(
     val categoryQuestionsCount = remember(questions, selectedCategory) {
         questions.count { it.matchesCategory(selectedCategory) }
     }
+
+    val categoryPassedCount = remember(passedMap, categoryQuestionsCount, selectedCategory) {
+        DataManager.getPassedCountForCategory(selectedCategory)
+    }
+
+    val learningPercent = if (categoryQuestionsCount > 0) {
+        ((categoryPassedCount.toFloat() / categoryQuestionsCount) * 100).toInt()
+    } else 0
 
     // Calculated Statistics
     val totalExams = history.size
@@ -162,6 +174,86 @@ fun HomeScreen(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
+            }
+
+            // Learning Progress & Practice Mode Card
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.School,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = stringResource(Res.string.learning_progress_title, selectedCategory),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 17.sp,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                        Surface(
+                            color = MaterialTheme.colorScheme.secondary,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(
+                                text = "$categoryPassedCount / $categoryQuestionsCount ($learningPercent%)",
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                            )
+                        }
+                    }
+
+                    LinearProgressIndicator(
+                        progress = { if (categoryQuestionsCount > 0) categoryPassedCount.toFloat() / categoryQuestionsCount.toFloat() else 0f },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .clip(RoundedCornerShape(4.dp)),
+                        color = Color(0xFF2E7D32),
+                        trackColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.2f)
+                    )
+
+                    Button(
+                        onClick = onOpenPractice,
+                        enabled = questions.isNotEmpty(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.School,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(Res.string.btn_start_learning),
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
 
             // Statistics Section

@@ -16,7 +16,7 @@
     <string name="db_banner_title">Baza Danych Pytań</string>
     <string name="db_empty_message">Brak wczytanej bazy pytań. Przejdź do Ustawień (⚙️), aby załadować pytania.</string>
     <string name="db_questions_count">Dostępnych pytań dla Kat. %1$s: %2$d (Łącznie: %3$d)</string>
-    <string name="btn_start_exam">ROZPOCZNIJ EGZAMIN PRÓBNY (32 Pytania)</string>
+    <string name="btn_start_exam">ROZPOCZNIJ EGZAMIN</string>
     <string name="exam_history_title">Ostatnie Wyniki Egzaminów:</string>
     <string name="stats_title">Statystyki Egzaminów</string>
     <string name="stats_total_exams">Rozegrane egzaminy</string>
@@ -32,6 +32,39 @@
     <string name="exam_passed">ZDAŁEŚ</string>
     <string name="exam_failed">NIE ZDAŁEŚ</string>
     <string name="pts_format">%1$d / %2$d pkt</string>
+
+    <!-- Practice / Learning Mode -->
+    <string name="learning_progress_title">Postęp Nauki: Kat. %1$s</string>
+    <string name="learning_progress_summary">Zaliczono %1$d z %2$d pytań (%3$d%%)</string>
+    <string name="btn_start_learning">TRYB NAUKI I DZIAŁÓW</string>
+    <string name="practice_screen_title">Tryb Nauki (Kat. %1$s)</string>
+    <string name="all_topics_tab">Wszystkie Działy</string>
+    <string name="unpassed_only_tab">Tylko Niezaliczone</string>
+    <string name="btn_start_topic">Rozpocznij naukę w tym dziale</string>
+    <string name="btn_reset_category_progress">Zresetuj postęp dla Kat. %1$s</string>
+    <string name="reset_progress_dialog_title">Resetowanie postępu</string>
+    <string name="reset_progress_dialog_text">Czy na pewno chcesz zresetować zaliczone pytania dla kategorii %1$s?</string>
+    <string name="topic_all_questions_name">Pełna baza pytań</string>
+    <string name="topic_all_questions_desc">Wszystkie pytania dostępne w wybranej kategorii</string>
+    <string name="topic_basic_3pts_name">Podstawowe (3 pkt)</string>
+    <string name="topic_basic_3pts_desc">Pytania o wysokim znaczeniu dla bezpieczeństwa (TAK/NIE)</string>
+    <string name="topic_basic_2pts_name">Podstawowe (2 pkt)</string>
+    <string name="topic_basic_2pts_desc">Pytania o średnim znaczeniu dla bezpieczeństwa (TAK/NIE)</string>
+    <string name="topic_basic_1pts_name">Podstawowe (1 pkt)</string>
+    <string name="topic_basic_1pts_desc">Pytania o niskim znaczeniu dla bezpieczeństwa (TAK/NIE)</string>
+    <string name="topic_spec_3pts_name">Specjalistyczne (3 pkt)</string>
+    <string name="topic_spec_3pts_desc">Pytania wiedzy specjalistycznej za 3 pkt (A/B/C)</string>
+    <string name="topic_spec_2pts_name">Specjalistyczne (2 pkt)</string>
+    <string name="topic_spec_2pts_desc">Pytania wiedzy specjalistycznej za 2 pkt (A/B/C)</string>
+    <string name="topic_spec_1pts_name">Specjalistyczne (1 pkt)</string>
+    <string name="topic_spec_1pts_desc">Pytania wiedzy specjalistycznej za 1 pkt (A/B/C)</string>
+    <string name="practice_question_progress">Dział: %1$s  |  Pytanie %2$d / %3$d</string>
+    <string name="answer_correct">✔ POPRAWNA ODPOWIEDŹ! Pytanie zaliczone!</string>
+    <string name="answer_incorrect">✘ BŁĘDNA ODPOWIEDŹ! Poprawna to: %1$s</string>
+    <string name="btn_next_question">NASTĘPNE PYTANIE</string>
+    <string name="btn_prev_question">POPRZEDNIE</string>
+    <string name="question_passed_badge">ZALICZONE</string>
+    <string name="question_unpassed_badge">NIEZALICZONE</string>
 
     <!-- ExamScreen -->
     <string name="question_progress">Pytanie %1$d / %2$d</string>

@@ -5,6 +5,8 @@ import com.testy.model.Question
 import com.testy.parser.PlatformZipUnpacker
 import com.testy.parser.XlsxQuestionParser
 import com.testy.parser.normalizeMediaKey
+import com.testy.ui.AppThemeMode
+import com.testy.ui.AppThemePalette
 import com.testy.ui.picker.PickedFile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +29,15 @@ object DataManager {
 
     private val _examHistory = MutableStateFlow<List<ExamResult>>(emptyList())
     val examHistory: StateFlow<List<ExamResult>> = _examHistory.asStateFlow()
+
+    private val _passedQuestionIds = MutableStateFlow<Map<String, Set<String>>>(emptyMap())
+    val passedQuestionIds: StateFlow<Map<String, Set<String>>> = _passedQuestionIds.asStateFlow()
+
+    private val _themeMode = MutableStateFlow(AppThemeMode.SYSTEM)
+    val themeMode: StateFlow<AppThemeMode> = _themeMode.asStateFlow()
+
+    private val _themePalette = MutableStateFlow(AppThemePalette.BLUE)
+    val themePalette: StateFlow<AppThemePalette> = _themePalette.asStateFlow()
 
     private val _isImporting = MutableStateFlow(false)
     val isImporting: StateFlow<Boolean> = _isImporting.asStateFlow()
@@ -55,13 +66,47 @@ object DataManager {
                 if (!savedDir.isNullOrBlank()) {
                     _customDataDir.value = savedDir
                 }
+                val savedMode = map["themeMode"]
+                if (!savedMode.isNullOrBlank()) {
+                    _themeMode.value = AppThemeMode.fromId(savedMode)
+                }
+                val savedPalette = map["themePalette"]
+                if (!savedPalette.isNullOrBlank()) {
+                    _themePalette.value = AppThemePalette.fromId(savedPalette)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
         loadQuestionsFromDisk()
         loadExamHistoryFromDisk()
+        loadLearningProgressFromDisk()
         updateExtractedMediaCount()
+    }
+
+    fun saveConfigToDisk() {
+        try {
+            val configPath = "${getAppMediaDirectoryPath()}/config.json"
+            val map = mapOf(
+                "customDir" to _customDataDir.value,
+                "themeMode" to _themeMode.value.id,
+                "themePalette" to _themePalette.value.id
+            )
+            val configData = json.encodeToString(map)
+            saveTextToPath(configPath, configData)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun setThemeMode(mode: AppThemeMode) {
+        _themeMode.value = mode
+        saveConfigToDisk()
+    }
+
+    fun setThemePalette(palette: AppThemePalette) {
+        _themePalette.value = palette
+        saveConfigToDisk()
     }
 
     fun updateExtractedMediaCount() {
@@ -81,15 +126,10 @@ object DataManager {
     fun setCustomDataDirectory(newPath: String) {
         if (newPath.isBlank()) return
         _customDataDir.value = newPath
-        try {
-            val configPath = "${getAppMediaDirectoryPath()}/config.json"
-            val configData = json.encodeToString(mapOf("customDir" to newPath))
-            saveTextToPath(configPath, configData)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        saveConfigToDisk()
         loadQuestionsFromDisk()
         loadExamHistoryFromDisk()
+        loadLearningProgressFromDisk()
         updateExtractedMediaCount()
     }
 
@@ -322,6 +362,71 @@ object DataManager {
     fun clearExamHistory() {
         _examHistory.value = emptyList()
         saveExamHistoryToDisk()
+    }
+
+    fun isQuestionPassed(category: String, questionId: String): Boolean {
+        return _passedQuestionIds.value[category]?.contains(questionId) == true
+    }
+
+    fun markQuestionPassed(category: String, questionId: String) {
+        val current = _passedQuestionIds.value.toMutableMap()
+        val set = (current[category] ?: emptySet()).toMutableSet()
+        if (set.add(questionId)) {
+            current[category] = set
+            _passedQuestionIds.value = current
+            saveLearningProgressToDisk()
+        }
+    }
+
+    fun getPassedCountForCategory(category: String): Int {
+        val passedSet = _passedQuestionIds.value[category] ?: return 0
+        val categoryQuestions = getQuestionsForCategory(category).map { it.id }.toSet()
+        return passedSet.count { it in categoryQuestions }
+    }
+
+    fun resetLearningProgressForCategory(category: String) {
+        val current = _passedQuestionIds.value.toMutableMap()
+        current.remove(category)
+        _passedQuestionIds.value = current
+        saveLearningProgressToDisk()
+    }
+
+    fun saveLearningProgressToDisk() {
+        val data = _passedQuestionIds.value
+        try {
+            val serialized = json.encodeToString(data)
+            val targetPath = "${_customDataDir.value}/learning_progress.json"
+            saveTextToPath(targetPath, serialized)
+
+            if (_customDataDir.value != getAppMediaDirectoryPath()) {
+                val defaultPath = "${getAppMediaDirectoryPath()}/learning_progress.json"
+                saveTextToPath(defaultPath, serialized)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun loadLearningProgressFromDisk() {
+        try {
+            val targetPath = "${_customDataDir.value}/learning_progress.json"
+            var text = readTextFromPath(targetPath)
+
+            if (text.isNullOrBlank() && _customDataDir.value != getAppMediaDirectoryPath()) {
+                val defaultPath = "${getAppMediaDirectoryPath()}/learning_progress.json"
+                text = readTextFromPath(defaultPath)
+                if (!text.isNullOrBlank()) {
+                    saveTextToPath(targetPath, text)
+                }
+            }
+
+            if (!text.isNullOrBlank()) {
+                val map = json.decodeFromString<Map<String, Set<String>>>(text)
+                _passedQuestionIds.value = map
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun getQuestionsForCategory(category: String): List<Question> {
