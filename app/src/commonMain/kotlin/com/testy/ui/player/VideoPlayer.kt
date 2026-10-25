@@ -6,5 +6,6 @@ import androidx.compose.ui.Modifier
 @Composable
 expect fun VideoPlayer(
     filePath: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onVideoEnded: () -> Unit = {}
 )

@@ -30,11 +30,15 @@ import java.io.File
 import javax.swing.JPanel
 import javax.swing.SwingUtilities
 
+import androidx.compose.runtime.rememberUpdatedState
+
 @Composable
 actual fun VideoPlayer(
     filePath: String,
     modifier: Modifier,
+    onVideoEnded: () -> Unit,
 ) {
+    val currentOnVideoEnded by rememberUpdatedState(onVideoEnded)
     val file = remember(filePath) { File(filePath) }
 
     if (!file.exists()) {
@@ -115,7 +119,7 @@ actual fun VideoPlayer(
 
             val mediaPlayer = component.mediaPlayer()
 
-            // Nasłuchiwanie na koniec odtwarzania - pauza na ostatniej klatce
+            // Nasłuchiwanie na koniec odtwarzania - pauza na ostatniej klatce i wywołanie callbacku
             mediaPlayer.events().addMediaPlayerEventListener(object : MediaPlayerEventAdapter() {
                 override fun finished(mediaPlayer: MediaPlayer) {
                     SwingUtilities.invokeLater {
@@ -124,6 +128,12 @@ actual fun VideoPlayer(
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
+                        currentOnVideoEnded()
+                    }
+                }
+                override fun error(mediaPlayer: MediaPlayer) {
+                    SwingUtilities.invokeLater {
+                        currentOnVideoEnded()
                     }
                 }
             })

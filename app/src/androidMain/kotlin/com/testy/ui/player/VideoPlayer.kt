@@ -12,15 +12,24 @@ import java.io.File
 @Composable
 actual fun VideoPlayer(
     filePath: String,
-    modifier: Modifier
+    modifier: Modifier,
+    onVideoEnded: () -> Unit
 ) {
+    val currentOnVideoEnded by rememberUpdatedState(onVideoEnded)
+
     AndroidView(
         modifier = modifier,
         factory = { context ->
             VideoView(context).apply {
                 setMediaController(null)
                 setOnTouchListener { _, _ -> true }
-                setOnErrorListener { _, _, _ -> true }
+                setOnErrorListener { _, _, _ ->
+                    currentOnVideoEnded()
+                    true
+                }
+                setOnCompletionListener {
+                    currentOnVideoEnded()
+                }
                 setOnPreparedListener { mp ->
                     mp.isLooping = false
                     start()
@@ -31,7 +40,13 @@ actual fun VideoPlayer(
             try {
                 videoView.setMediaController(null)
                 videoView.setOnTouchListener { _, _ -> true }
-                videoView.setOnErrorListener { _, _, _ -> true }
+                videoView.setOnCompletionListener {
+                    currentOnVideoEnded()
+                }
+                videoView.setOnErrorListener { _, _, _ ->
+                    currentOnVideoEnded()
+                    true
+                }
 
                 val currentUri = Uri.fromFile(File(filePath))
                 val tagUri = videoView.tag as? Uri

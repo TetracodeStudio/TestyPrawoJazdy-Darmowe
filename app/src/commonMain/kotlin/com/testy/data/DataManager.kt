@@ -60,6 +60,7 @@ object DataManager {
             }
         }
         loadQuestionsFromDisk()
+        loadExamHistoryFromDisk()
         updateExtractedMediaCount()
     }
 
@@ -88,6 +89,7 @@ object DataManager {
             e.printStackTrace()
         }
         loadQuestionsFromDisk()
+        loadExamHistoryFromDisk()
         updateExtractedMediaCount()
     }
 
@@ -274,8 +276,52 @@ object DataManager {
         return null
     }
 
+    fun saveExamHistoryToDisk() {
+        val list = _examHistory.value
+        try {
+            val serialized = json.encodeToString(list)
+            val targetPath = "${_customDataDir.value}/exam_history.json"
+            saveTextToPath(targetPath, serialized)
+
+            if (_customDataDir.value != getAppMediaDirectoryPath()) {
+                val defaultPath = "${getAppMediaDirectoryPath()}/exam_history.json"
+                saveTextToPath(defaultPath, serialized)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun loadExamHistoryFromDisk() {
+        try {
+            val targetPath = "${_customDataDir.value}/exam_history.json"
+            var text = readTextFromPath(targetPath)
+
+            if (text.isNullOrBlank() && _customDataDir.value != getAppMediaDirectoryPath()) {
+                val defaultPath = "${getAppMediaDirectoryPath()}/exam_history.json"
+                text = readTextFromPath(defaultPath)
+                if (!text.isNullOrBlank()) {
+                    saveTextToPath(targetPath, text)
+                }
+            }
+
+            if (!text.isNullOrBlank()) {
+                val list = json.decodeFromString<List<ExamResult>>(text)
+                _examHistory.value = list
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun addExamResult(result: ExamResult) {
         _examHistory.value = listOf(result) + _examHistory.value
+        saveExamHistoryToDisk()
+    }
+
+    fun clearExamHistory() {
+        _examHistory.value = emptyList()
+        saveExamHistoryToDisk()
     }
 
     fun getQuestionsForCategory(category: String): List<Question> {

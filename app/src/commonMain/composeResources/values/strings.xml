@@ -11,13 +11,24 @@
     <string name="time">Czas</string>
 
     <!-- HomeScreen -->
-    <string name="select_category">Wybierz Kategorię Prawa Jazdy:</string>
+    <string name="select_category">Wybrana Kategoria Prawa Jazdy: %1$s</string>
     <string name="category_label">Kat. %1$s</string>
-    <string name="db_banner_title">Baza Danych Pytań: Kat. %1$s</string>
+    <string name="db_banner_title">Baza Danych Pytań</string>
     <string name="db_empty_message">Brak wczytanej bazy pytań. Przejdź do Ustawień (⚙️), aby załadować pytania.</string>
     <string name="db_questions_count">Dostępnych pytań dla Kat. %1$s: %2$d (Łącznie: %3$d)</string>
     <string name="btn_start_exam">ROZPOCZNIJ EGZAMIN PRÓBNY (32 Pytania)</string>
     <string name="exam_history_title">Ostatnie Wyniki Egzaminów:</string>
+    <string name="stats_title">Statystyki Egzaminów</string>
+    <string name="stats_total_exams">Rozegrane egzaminy</string>
+    <string name="stats_passed_count">Pozytywne (Zdał)</string>
+    <string name="stats_failed_count">Negatywne (Niezdał)</string>
+    <string name="stats_pass_rate">Zdawalność</string>
+    <string name="stats_avg_score">Średni wynik</string>
+    <string name="stats_best_score">Najlepszy wynik</string>
+    <string name="btn_clear_history">Wyczyść historię</string>
+    <string name="clear_history_dialog_title">Wyczyszczenie historii</string>
+    <string name="clear_history_dialog_text">Czy na pewno chcesz usunąć całą historię wyników egzaminów?</string>
+    <string name="no_history_message">Brak zapisanych wyników egzaminów. Rozpocznij egzamin próbny!</string>
     <string name="exam_passed">ZDAŁEŚ</string>
     <string name="exam_failed">NIE ZDAŁEŚ</string>
     <string name="pts_format">%1$d / %2$d pkt</string>

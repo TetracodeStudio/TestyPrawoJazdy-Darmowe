@@ -1,19 +1,27 @@
 package com.testy.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Assessment
+import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.testy.data.DataManager
@@ -33,8 +41,39 @@ fun HomeScreen(
     val history by DataManager.examHistory.collectAsState()
     val availableCategories = DataManager.availableCategories
 
+    var showClearHistoryDialog by remember { mutableStateOf(false) }
+
     val categoryQuestionsCount = remember(questions, selectedCategory) {
         questions.count { it.matchesCategory(selectedCategory) }
+    }
+
+    // Calculated Statistics
+    val totalExams = history.size
+    val passedExams = history.count { it.isPassed }
+    val failedExams = totalExams - passedExams
+    val passRatePercent = if (totalExams > 0) ((passedExams.toFloat() / totalExams) * 100).toInt() else 0
+    val averageScore = if (totalExams > 0) (history.map { it.totalScore }.average()).toInt() else 0
+    val bestScore = if (totalExams > 0) history.maxOf { it.totalScore } else 0
+
+    if (showClearHistoryDialog) {
+        AlertDialog(
+            onDismissRequest = { showClearHistoryDialog = false },
+            title = { Text(stringResource(Res.string.clear_history_dialog_title)) },
+            text = { Text(stringResource(Res.string.clear_history_dialog_text)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    DataManager.clearExamHistory()
+                    showClearHistoryDialog = false
+                }) {
+                    Text(stringResource(Res.string.delete), color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearHistoryDialog = false }) {
+                    Text(stringResource(Res.string.cancel))
+                }
+            }
+        )
     }
 
     Scaffold(
@@ -65,41 +104,16 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Category Selector
             Text(
-                text = stringResource(Res.string.select_category),
+                text = stringResource(Res.string.select_category, selectedCategory),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
-
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                items(availableCategories) { cat ->
-                    val isSelected = cat == selectedCategory
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.clickable { onCategorySelected(cat) }
-                    ) {
-                        Box(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = stringResource(Res.string.category_label, cat),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp
-                            )
-                        }
-                    }
-                }
-            }
 
             // Database info banner
             Card(
@@ -114,7 +128,7 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Text(
-                        text = stringResource(Res.string.db_banner_title, selectedCategory),
+                        text = stringResource(Res.string.db_banner_title),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -131,7 +145,7 @@ fun HomeScreen(
                 }
             }
 
-            // Main Action Buttons
+            // Main Action Button
             Button(
                 onClick = onStartExam,
                 enabled = questions.isNotEmpty(),
@@ -150,22 +164,145 @@ fun HomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            // Statistics Section
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Assessment,
+                            contentDescription = stringResource(Res.string.stats_title),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = stringResource(Res.string.stats_title),
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    if (totalExams == 0) {
+                        Text(
+                            text = stringResource(Res.string.no_history_message),
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    } else {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            StatCard(
+                                title = stringResource(Res.string.stats_pass_rate),
+                                value = "$passRatePercent%",
+                                valueColor = when {
+                                    passRatePercent >= 80 -> Color(0xFF2E7D32)
+                                    passRatePercent >= 50 -> Color(0xFFF57F17)
+                                    else -> Color(0xFFC62828)
+                                },
+                                modifier = Modifier.weight(1f)
+                            )
+                            StatCard(
+                                title = stringResource(Res.string.stats_total_exams),
+                                value = "$totalExams",
+                                subtitle = "$passedExams zdał / $failedExams oblał",
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            StatCard(
+                                title = stringResource(Res.string.stats_avg_score),
+                                value = "$averageScore / 74",
+                                modifier = Modifier.weight(1f)
+                            )
+                            StatCard(
+                                title = stringResource(Res.string.stats_best_score),
+                                value = "$bestScore / 74",
+                                valueColor = Color(0xFF2E7D32),
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+
+                        // Pass Rate Bar
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = stringResource(Res.string.stats_pass_rate),
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = "$passRatePercent%",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (passRatePercent >= 80) Color(0xFF2E7D32) else Color(0xFFC62828)
+                                )
+                            }
+                            LinearProgressIndicator(
+                                progress = { passRatePercent.toFloat() / 100f },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(8.dp)
+                                    .clip(RoundedCornerShape(4.dp)),
+                                color = if (passRatePercent >= 80) Color(0xFF2E7D32) else Color(0xFFC62828),
+                                trackColor = MaterialTheme.colorScheme.surface
+                            )
+                        }
+                    }
+                }
+            }
 
             // Exam History Section
             if (history.isNotEmpty()) {
-                Text(
-                    text = stringResource(Res.string.exam_history_title),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(Res.string.exam_history_title),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    TextButton(onClick = { showClearHistoryDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Default.DeleteSweep,
+                            contentDescription = stringResource(Res.string.btn_clear_history),
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = stringResource(Res.string.btn_clear_history),
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
 
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    items(history.take(5)) { res ->
-                        HistoryChip(result = res)
+                    history.take(10).forEach { res ->
+                        HistoryCard(result = res)
                     }
                 }
             }
@@ -174,37 +311,143 @@ fun HomeScreen(
 }
 
 @Composable
-fun HistoryChip(result: ExamResult) {
-    val bg = if (result.isPassed) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
-    val fg = if (result.isPassed) Color(0xFF2E7D32) else Color(0xFFC62828)
+fun StatCard(
+    title: String,
+    value: String,
+    subtitle: String? = null,
+    valueColor: Color = MaterialTheme.colorScheme.onSurface,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surface,
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = title,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = value,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = valueColor
+            )
+            subtitle?.let {
+                Text(
+                    text = it,
+                    fontSize = 10.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun HistoryCard(result: ExamResult) {
+    val isPassed = result.isPassed
+    val bg = if (isPassed) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
+    val statusColor = if (isPassed) Color(0xFF2E7D32) else Color(0xFFC62828)
+    val statusText = if (isPassed) stringResource(Res.string.exam_passed) else stringResource(Res.string.exam_failed)
 
     Surface(
         color = bg,
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, fg.copy(alpha = 0.5f))
+        border = BorderStroke(1.dp, statusColor.copy(alpha = 0.3f)),
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier
+                .padding(14.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(Res.string.category_label, result.category),
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = fg
-            )
-            Text(
-                text = stringResource(Res.string.pts_format, result.totalScore, result.maxScore),
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color = fg
-            )
-            Text(
-                text = if (result.isPassed) stringResource(Res.string.exam_passed) else stringResource(Res.string.exam_failed),
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold,
-                color = fg
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        text = stringResource(Res.string.category_label, result.category),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        color = statusColor
+                    )
+                    Text(
+                        text = "•",
+                        fontSize = 12.sp,
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = formatTimestamp(result.timestamp),
+                        fontSize = 12.sp,
+                        color = Color.DarkGray
+                    )
+                }
+                Text(
+                    text = stringResource(Res.string.pts_format, result.totalScore, result.maxScore),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black.copy(alpha = 0.8f)
+                )
+            }
+
+            Surface(
+                color = statusColor,
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(
+                    text = statusText,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                )
+            }
         }
     }
+}
+
+fun formatTimestamp(epochMs: Long): String {
+    if (epochMs <= 0) return "—"
+    val totalSec = epochMs / 1000
+    val min = ((totalSec / 60) % 60).toInt()
+    val hour = ((totalSec / 3600) % 24).toInt()
+
+    var days = (totalSec / 86400).toInt()
+    var year = 1970
+    while (true) {
+        val daysInYear = if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) 366 else 365
+        if (days >= daysInYear) {
+            days -= daysInYear
+            year++
+        } else {
+            break
+        }
+    }
+
+    val daysInMonths = if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+        intArrayOf(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+    } else {
+        intArrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+    }
+
+    var month = 0
+    while (month < 12 && days >= daysInMonths[month]) {
+        days -= daysInMonths[month]
+        month++
+    }
+    val day = days + 1
+    val monthNumber = month + 1
+
+    fun pad(n: Int) = if (n < 10) "0$n" else "$n"
+    return "${pad(day)}.${pad(monthNumber)}.$year ${pad(hour)}:${pad(min)}"
 }

@@ -11,7 +11,8 @@ import androidx.compose.ui.graphics.Color
 @Composable
 actual fun VideoPlayer(
     filePath: String,
-    modifier: Modifier
+    modifier: Modifier,
+    onVideoEnded: () -> Unit
 ) {
     Box(
         modifier = modifier.background(Color.Black),
