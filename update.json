@@ -1,19 +1,5 @@
 {
   "versionCode": 1,
-  "versionName": "1.0.0",
   "apkUrl": "https://github.com/TetracodeStudio/TestyPrawoJazdy-Darmowe/releases/latest/download/TestyPrawoJazdy.apk",
-  "desktopVersionCode": 2,
-  "desktopVersionName": "1.0.0",
-  "desktopUrl": "https://github.com/TetracodeStudio/TestyPrawoJazdy-Darmowe/releases/latest/windows.msi",
-  "android": {
-    "versionCode": 1,
-    "versionName": "1.0.0",
-    "apkUrl": "https://github.com/TetracodeStudio/TestyPrawoJazdy-Darmowe/releases/latest/download/TestyPrawoJazdy.apk"
-  },
-  "desktop": {
-    "versionCode": 2,
-    "versionName": "1.0.0",
-    "downloadUrl": "https://github.com/TetracodeStudio/TestyPrawoJazdy-Darmowe/releases/latest/download/windows.msi"
-  },
-  "changelog": "Wydanie wersji 1.0.0 aplikacji Testy Na Prawo Jazdy dla Android oraz Desktop."
+  "desktopUrl": "https://github.com/TetracodeStudio/TestyPrawoJazdy-Darmowe/releases/latest/download/TestyPrawoJazdy.exe"
 }
