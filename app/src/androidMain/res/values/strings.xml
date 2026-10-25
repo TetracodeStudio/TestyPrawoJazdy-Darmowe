@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Testy Na Prawo Jazdy</string>
+    <string name="update_available_title">Aktualizacja aplikacji Testy Prawo Jazdy</string>
+    <string name="update_downloading">Pobieranie nowej wersji aplikacji...</string>
 </resources>

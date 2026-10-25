@@ -134,4 +134,11 @@
     <string name="download_data_question">Skąd pobrać te dane?</string>
     <string name="download_data_text">Z oficjalnej strony gov.pl. Pamiętaj, aby pobrać bazę pytań oraz wszystkie załączniki.</string>
     <string name="download_data_btn">Pobierz dane z gov.pl</string>
+
+    <!-- App Updater -->
+    <string name="update_available_title">Aktualizacja Aplikacji</string>
+    <string name="update_downloading">Pobieranie nowej wersji aplikacji&#8230;</string>
+    <string name="check_for_updates">Sprawdź aktualizacje</string>
+    <string name="update_checking">Sprawdzanie dostępności aktualizacji&#8230;</string>
+    <string name="update_no_updates">Aplikacja jest aktualna.</string>
 </resources>

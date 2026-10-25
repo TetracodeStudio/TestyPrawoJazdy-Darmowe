@@ -46,6 +46,7 @@ fun SettingsScreen(
     var mediaParts by remember { mutableStateOf<List<PickedFile>>(emptyList()) }
     var statusLogs by remember { mutableStateOf<List<String>>(emptyList()) }
     var progressStatus by remember { mutableStateOf("") }
+    var isCheckingUpdate by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
 
@@ -320,6 +321,51 @@ fun SettingsScreen(
                             text = stringResource(Res.string.download_data_btn),
                             fontWeight = FontWeight.Bold
                         )
+                    }
+                }
+            }
+
+            // App Updates Card
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(Res.string.update_available_title),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = if (isCheckingUpdate) stringResource(Res.string.update_checking) else "Sprawdź, czy dostępna jest nowa wersja",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                        )
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            scope.launch {
+                                isCheckingUpdate = true
+                                AppUpdater.checkForUpdates()
+                                isCheckingUpdate = false
+                            }
+                        },
+                        enabled = !isCheckingUpdate
+                    ) {
+                        if (isCheckingUpdate) {
+                            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                        } else {
+                            Text(stringResource(Res.string.check_for_updates))
+                        }
                     }
                 }
             }

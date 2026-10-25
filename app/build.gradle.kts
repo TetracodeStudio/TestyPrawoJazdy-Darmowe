@@ -116,12 +116,12 @@ compose.desktop {
             isEnabled = false
         }
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
             windows {
                 iconFile.set(project.file("src/desktopMain/resources/icon.ico"))
             }
             macOS {
-                iconFile.set(project.file("src/desktopMain/resources/icon.ico"))
+                iconFile.set(project.file("src/desktopMain/resources/icon.png"))
             }
             linux {
                 iconFile.set(project.file("src/desktopMain/resources/icon.png"))

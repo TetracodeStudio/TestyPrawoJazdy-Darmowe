@@ -131,4 +131,11 @@
     <string name="db_memory_status">Database Memory Status</string>
     <string name="db_memory_summary">• Number of questions in database: %1$d\n• Number of media files in memory: %2$d files</string>
     <string name="none_selected">No question file selected.</string>
+
+    <!-- App Updater -->
+    <string name="update_available_title">App Update</string>
+    <string name="update_downloading">Downloading new version&#8230;</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="update_checking">Checking for updates&#8230;</string>
+    <string name="update_no_updates">App is up to date.</string>
 </resources>

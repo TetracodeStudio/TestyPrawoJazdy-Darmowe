@@ -45,6 +45,10 @@ fun HomeScreen(
     val passedMap by DataManager.passedQuestionIds.collectAsState()
     val availableCategories = DataManager.availableCategories
 
+    LaunchedEffect(Unit) {
+        AppUpdater.checkForUpdates()
+    }
+
     var showClearHistoryDialog by remember { mutableStateOf(false) }
 
     val categoryQuestionsCount = remember(questions, selectedCategory) {
