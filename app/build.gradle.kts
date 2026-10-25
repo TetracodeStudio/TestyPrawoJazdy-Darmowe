@@ -100,7 +100,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -113,10 +118,11 @@ compose.desktop {
     application {
         mainClass = "com.testy.MainKt"
         buildTypes.release.proguard {
-            isEnabled = false
+            isEnabled = true
+            configurationFiles.from(project.file("proguard-rules.pro"))
         }
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Deb)
             windows {
                 iconFile.set(project.file("src/desktopMain/resources/icon.ico"))
             }
