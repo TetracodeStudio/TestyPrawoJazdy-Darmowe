@@ -138,4 +138,13 @@
     <string name="check_for_updates">Check for updates</string>
     <string name="update_checking">Checking for updates&#8230;</string>
     <string name="update_no_updates">App is up to date.</string>
+
+    <!-- About App -->
+    <string name="about_app_title">About App</string>
+    <string name="app_author_label">Author</string>
+    <string name="app_author_value">Tetracode Studio</string>
+    <string name="app_copyright_label">Copyright</string>
+    <string name="app_copyright_value">© 2026 Tetracode Studio. All rights reserved.</string>
+    <string name="app_version_label">Version</string>
+    <string name="app_version_value">1.0.0 (build 1)</string>
 </resources>

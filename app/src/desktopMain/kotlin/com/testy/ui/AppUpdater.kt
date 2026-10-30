@@ -1,5 +1,6 @@
 package com.testy.ui
 
+import com.testy.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -13,7 +14,7 @@ import java.net.URL
 
 actual object AppUpdater {
     private const val UPDATE_URL = "https://raw.githubusercontent.com/TetracodeStudio/TestyPrawoJazdy-Darmowe/refs/heads/master/update.json"
-    const val versionCode = 1
+
     actual suspend fun checkForUpdates() {
         withContext(Dispatchers.IO) {
             try {
@@ -25,7 +26,7 @@ actual object AppUpdater {
                     val latestCode = json["versionCode"]?.jsonPrimitive?.intOrNull ?: 0
                     val desktopUrl = json["desktopUrl"]?.jsonPrimitive?.content ?: ""
 
-                    if (latestCode > versionCode && desktopUrl.isNotEmpty()) {
+                    if (latestCode > BuildConfig.VERSION_CODE && desktopUrl.isNotEmpty()) {
                         if (Desktop.isDesktopSupported()) {
                             Desktop.getDesktop().browse(URI(desktopUrl))
                         }
