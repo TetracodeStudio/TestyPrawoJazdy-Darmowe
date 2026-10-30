@@ -9,6 +9,41 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+val appVersionName = "1.0.1"
+val appVersionCode = 2
+
+abstract class GenerateBuildConfigTask : DefaultTask() {
+    @get:Input
+    abstract val versionName: Property<String>
+    @get:Input
+    abstract val versionCode: Property<Int>
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun generate() {
+        val file = outputDir.get().file("com/testy/BuildConfig.kt").asFile
+        file.parentFile.mkdirs()
+        file.writeText(
+            """
+            package com.testy
+
+object BuildConfig {
+    const val VERSION_NAME: String = "${versionName.get()}"
+    const val VERSION_CODE: Int = ${versionCode.get()}
+    const val PACKAGE_VERSION: String = "${versionName.get()}"
+}
+            """.trimIndent()
+        )
+    }
+}
+
+val generateBuildConfig = tasks.register<GenerateBuildConfigTask>("generateBuildConfig") {
+    versionName.set(appVersionName)
+    versionCode.set(appVersionCode)
+    outputDir.set(layout.buildDirectory.dir("generated/source/buildConfig/commonMain/kotlin"))
+}
+
 kotlin {
     androidTarget {
         compilerOptions {
@@ -48,6 +83,7 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
+            kotlin.srcDir(generateBuildConfig)
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -91,8 +127,8 @@ android {
         applicationId = "com.testy"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = appVersionCode
+        versionName = appVersionName
     }
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -112,15 +148,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    buildFeatures {
+        buildConfig = false
+    }
 }
 
 compose.desktop {
     application {
         mainClass = "com.testy.MainKt"
-        buildTypes.release.proguard {
-            isEnabled = true
-            configurationFiles.from(project.file("proguard-rules.pro"))
-        }
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Deb)
             windows {
@@ -133,7 +168,7 @@ compose.desktop {
                 iconFile.set(project.file("src/desktopMain/resources/icon.png"))
             }
             packageName = "PrawoJazdyTesty"
-            packageVersion = "1.0.0"
+            packageVersion = appVersionName
         }
     }
 }

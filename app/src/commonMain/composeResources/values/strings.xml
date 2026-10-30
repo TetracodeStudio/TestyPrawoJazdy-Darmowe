@@ -141,4 +141,12 @@
     <string name="check_for_updates">Sprawdź aktualizacje</string>
     <string name="update_checking">Sprawdzanie dostępności aktualizacji&#8230;</string>
     <string name="update_no_updates">Aplikacja jest aktualna.</string>
+
+    <!-- About App -->
+    <string name="about_app_title">O aplikacji</string>
+    <string name="app_author_label">Autor</string>
+    <string name="app_author_value">Tetracode Studio</string>
+    <string name="app_copyright_label">Prawa autorskie</string>
+    <string name="app_copyright_value">© 2026 Testy Na Prawo Jazdy. Licencja MIT.</string>
+    <string name="app_version_label">Wersja</string>
 </resources>

@@ -28,6 +28,7 @@ import com.testy.data.DataManager
 import com.testy.model.ExamResult
 import org.jetbrains.compose.resources.stringResource
 import testy.app.generated.resources.*
+import com.testy.BuildConfig.VERSION_NAME
 
 import androidx.compose.material.icons.filled.School
 
@@ -402,6 +403,27 @@ fun HomeScreen(
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Footer
+            Text(
+                text = stringResource(Res.string.app_version_label) + " " + VERSION_NAME,
+                fontSize = 11.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Footer
+            Text(
+                text = stringResource(Res.string.app_copyright_value),
+                fontSize = 11.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
